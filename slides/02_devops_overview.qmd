@@ -1,10 +1,10 @@
 ---
 title: "Dev-Ops for Data Scientists"
-subtitle: Overview and Best Practices
+subtitle: 'Workshops for Ukraine'
 format:
   revealjs:
     slide-number: true
-    footer: "<https://github.com/posit-conf-2024/dev-ops>"
+    footer: "<https://github.com/Rikagx/devops-workshop-for-ukraine>"
     preview-links: auto
     incremental: true
     theme:
@@ -145,9 +145,7 @@ Practices and supporting tooling
 proliferation of tools, source code management, repo management, build tools, data management, deployment, container services, config management, monitoring, cloud services
 :::
 
-## Best Practices \> Tools
-
-[The 12-factor App](12factor.net)
+## Best Practices from the 12factor App
 
 ::: nonincremental
 1.  **Codebase** - One codebase tracked in revision control, many deploys
@@ -221,20 +219,22 @@ Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
 
 <br>
 
--   The **Build** stage is where code is retrieved from the source code management system and built/compiled into artifacts.
--   After the code is built, configuration settings are applied in the **Release** stage.
--   Then, in the **Run** stage, a runtime environment is provisioned via scripts. The application and its dependencies are deployed into the newly provisioned runtime environment.
--   The key to **Build, Release, and Run** is that the process is completely ephemeral. Should anything in the pipeline be destroyed, all artifacts and environments can be recreated from scratch using source code repository.
-
 ![](assets/images/02/buildreleaserun.png)
 
 ::: footer
 Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
 :::
 
+::: notes
+-   The **Build** stage is where code is retrieved from the source code management system and built/compiled into artifacts.
+-   After the code is built, configuration settings are applied in the **Release** stage.
+-   Then, in the **Run** stage, a runtime environment is provisioned via scripts. The application and its dependencies are deployed into the newly provisioned runtime environment.
+-   The key to **Build, Release, and Run** is that the process is completely ephemeral. Should anything in the pipeline be destroyed, all artifacts and environments can be recreated from scratch using source code repository.
+:::
+
 ## Processes
 
-<br> Applications should be deployed as one or more stateless processes with persisted data stored on a backing service. This means that no single process keeps track of the state of another process and that no process keeps track of information such as session or workflow status. A stateless process makes scaling easier.
+<br> Applications should be deployed as one or more stateless processes with persisted data stored on a backing service.
 
 ![](assets/images/02/process.png)
 
@@ -242,15 +242,26 @@ Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
 Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
 :::
 
+::: notes
+This means that no single process keeps track of the state of another process and that no process keeps track of information such as session or workflow status. A stateless process makes scaling easier.
+Discuss shiny and other types of applications, caching, etc
+:::
+
 ## Dev/Prod parity
 
-<br> All environments should be as similar as possible
+<br>
 
-![](assets/images/02/dev-prodparity.png)
-
-::: footer
-Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
-:::
++---------------------------------+-------------------------------------------------------------+------------------------------+
+| Development                     | Testing                                                     | Production                   |
++=================================+=============================================================+==============================+
+| -   Exploratory                 | -   as similar to prod as possible                          | -   automatic CD             |
+|                                 |                                                             |                              |
+| -   Often local machine         | -   unit & integration testing                              | -   isolated from dev & test |
+|                                 |                                                             |                              |
+| -   Access to R/Python Packages | -   data validation                                         | -   created with code        |
+|                                 |                                                             |                              |
+|                                 | -   "sandbox" with data that's as close to real as possible |                              |
++---------------------------------+-------------------------------------------------------------+------------------------------+
 
 ## Logs
 
@@ -281,6 +292,18 @@ Credit: An illustrated guide to 12 Factor Apps by Bob Reselman
 
 ![](assets/images/02/bestpractice.jpg)
 
+##
+::: nonincremental
+
+1. [Collaboration & Version Control]{.mark}
+2. Environment Management & Reproducibility
+3. Continuous Integration & Deployment
+4. Automation
+5. Containers & Orchestration
+6. Observability & Monitoring
+
+:::
+
 ## Version Control & Collaboration
 
 ![](assets/images/02/gitworkflow.png)
@@ -303,22 +326,20 @@ In addition to the action of promoting your code - its also important to have pr
 e.g code reviews, process for your team, how to name things, pull requests, merging, feature branching, automatic tests
 :::
 
-## ✏️ Your turn {.smaller transition="slide-in"}
+##
+::: nonincremental
 
-::: {.callout-note icon="false"}
-## Activity 1: Git workflow + branching
+1. Collaboration & Version Control
+2. [Environment Management & Reproducibility]{.mark}
+3. Continuous Integration & Deployment
+4. Automation
+5. Containers & Orchestration
+6. Observability & Monitoring
 
--   initialize git locally
--   add content and merge
--   create a branch and add content
--   merge branch into main
 :::
 
-<br> <br> <br> [Activity 1 Instructions](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#fork-repository)
 
-## Environment Management & Reproducibility
-
-## 💬 Discussion
+## 💬 Environment Management & Reproducibility
 
 ::: {style="margin-top: 200px; font-size: 1.5em; color: blue;"}
 What are the layers that need to be reproduced across your dev, test, and prod environments?
@@ -376,20 +397,18 @@ pip freeze > requirements.txt
 ```
 :::
 
-## ✏️ Your turn {.smaller transition="slide-in"}
+##
+::: nonincremental
 
-::: {.callout-note icon="false"}
-## Activity 2: Create R & Python virtual environments
+1. Collaboration & Version Control
+2. Environment Management & Reproducibility
+3. [Continuous Integration & Deployment]{.mark}
+4. Automation
+5. Containers & Orchestration
+6. Observability & Monitoring
 
--   Create renv virtual env
--   Run EDA in R env and snapshot
--   Create python venv virtual env
--   Run linear regression model in python env
--   Snapshot python requirements file
--   Push code to main in your repo
 :::
 
-<br> <br> <br> [Activity 2 Instructions](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#r)
 
 ## Continuous Integration & Delivery
 
@@ -433,6 +452,13 @@ When other people are using your:
 -   dashboard
 -   model
 
+
+## Getting to Production
+
+<br>
+
+You've written a kickass app! Now what?
+
 ## Production Quality
 
 <br>
@@ -443,29 +469,69 @@ When other people are using your:
 -   **Snappy**: fast response times, ability to predict needed capacity for expanded traffic
 -   **Sturdy**: design and test to minimize the likelihood that changes will break things
 
-## Building environments for CI/CD
+## 💬 Discussion
+
+-   How are we presenting our code?
+
+-   What is the data architecture?
+
+-   Where is it being deployed?
+
+-   Is it secure and accessible?
+
+-   Does it scale?
+
+## Think about data auth early!
+
+![](assets/images/03/whose-creds.png)
+
+::: footer
+Illustration by Alex Gold www.do4ds.com
+:::
+
+## Choosing the right presentation layer
 
 <br>
 
-+---------------------------------+-------------------------------------------------------------+------------------------------+
-| Development                     | Testing                                                     | Production                   |
-+=================================+=============================================================+==============================+
-| -   Exploratory                 | -   as similar to prod as possible                          | -   automatic CD             |
-|                                 |                                                             |                              |
-| -   Often local machine         | -   unit & integration testing                              | -   isolated from dev & test |
-|                                 |                                                             |                              |
-| -   Access to R/Python Packages | -   data validation                                         | -   created with code        |
-|                                 |                                                             |                              |
-|                                 | -   "sandbox" with data that's as close to real as possible |                              |
-+---------------------------------+-------------------------------------------------------------+------------------------------+
+*Presentation Layer* 🖼️ – what the end users of the app directly interact with. It’s the displays, buttons, and functionality the user experiences.
 
-## Shipping to Production
+<br>
 
-![](assets/images/02/shippingextremes.png){width="563"}
+*Processing Layer* ⚒️ – the processing that happens as a result of user interactions. Sometimes, it is called the *business logic*.
+
+<br>
+
+*Data Layer* 🛢️ – how and where the app stores and retrieves data.
+
+## Presentation Layer
+
+![](assets/images/03/presentation-layer.png)
 
 ::: footer
-from https://blog.pragmaticengineer.com/shipping-to-production/ written and illustrated by Gergely Orosz
+Illustration by Alex Gold www.do4ds.com
 :::
+
+## What's happening with the data?
+
+-   Can you remove the data processing and storage from the presentation?
+
+-   Can you pre-calculate anything?
+
+-   Can you reduce data granularity?
+
+-   When is data pulled in and refreshed?
+
+## Data Storage
+
+| Location      | Use case                                                                                                                                                                                                                                |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| With the code | Data is updated as often or less often than the app code and doesn’t need to be shared across projects                                                                                                                                  |
+| Database      | Gold standard for data storage and access                                                                                                                                                                                               |
+| Pins          | Lightweight datasets, ephemeral data, models                                                                                                                                                                                            |
+| Blob Storage  | Gold standard for storing large amounts of unstructured data                                                                                                                                                                            |
+| In the server | Typically the method of last resort for unstructured data as it requires SSH access to the server for setup and often requires code changes between development and deployment, however for very large files, it may be the only option |
+| API           | Gold standard for data that requires long-running business logic, like training an ML model                                                                                                                                             |
+
 
 ## Importance of Testing
 
@@ -510,16 +576,16 @@ from https://blog.pragmaticengineer.com/shipping-to-production/ written and illu
 
 name: learn-github-actions
 
-# Specifies the trigger for this workflow. This example uses the `push` event, so a workflow run is triggered every time someone pushes a change to the repository or merges a pull request.  
+# Specifies the trigger for this workflow. This example uses the `push` event, so a workflow run is triggered every time someone pushes a change to the repository or merges a pull request.
 on: [push]
 
 # Groups together all the jobs that run in the `learn-github-actions` workflow
 jobs:
 
-# Defines a job named `check-bats-version`. Bats refers to Bash Automated Testing. 
+# Defines a job named `check-bats-version`. Bats refers to Bash Automated Testing.
   check-bats-version:
 
-# Configures the job to run on the latest version of an Ubuntu Linux runner. This means that the job will execute on a fresh virtual machine hosted by GitHub. 
+# Configures the job to run on the latest version of an Ubuntu Linux runner. This means that the job will execute on a fresh virtual machine hosted by GitHub.
     runs-on: ubuntu-latest
 
 # Groups together all the steps that run in the `check-bats-version` job. Each item nested under this section is a separate action or shell script.
@@ -528,7 +594,7 @@ jobs:
 # The `uses` keyword specifies that this step will run `v4` of the `actions/checkout` action. This is an action that checks out your repository onto the runner, allowing you to run scripts or other actions against your code (such as build and test tools). You should use the checkout action any time your workflow will use the repository's code.
       - uses: actions/checkout@v4
 
-# This step uses the `actions/setup-node@v4` action to install the specified version of the Node.js. (This example uses version 20.) 
+# This step uses the `actions/setup-node@v4` action to install the specified version of the Node.js. (This example uses version 20.)
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -553,19 +619,19 @@ jobs:
 
 ## YAML Syntax
 
-```         
-EmpRecord:  
+```
+EmpRecord:
   emp01:
     name: Michael
     job: Manager
-    skills: 
+    skills:
       - Improv
       - Public speaking
       - People management
   emp02:
     name: Dwight
     job: Assistant to the Manager
-    skills: 
+    skills:
       - Martial Arts
       - Beets
       - Sales
@@ -582,50 +648,47 @@ EmpRecord:
 -   [Github Official Actions](https://www.github.com/actions)
 -   [RLib Actions](https://www.github.com/r-lib/actions)
 
-## 🔍 Test and Publish to Connect
+## 🔍 Publish Shiny App
 
 ``` yaml
 ---
-name: test-and-connect-publish
+name: publish
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
- 
+
 jobs:
-  test-and-connect-publish:
-    runs-on: ubuntu-22.04
+  shiny-deploy:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 4.2.3
           use-public-rspm: true
+          r-version: renv
 
       - uses: r-lib/actions/setup-renv@v2
-          
-      - name: Test Shiny App
+
+      - name: Install rsconnect
+        run: install.packages("rsconnect")
         shell: Rscript {0}
+
+      - name: Authorize and deploy app
+        env:
+          # Provide your app name, account name, and server to be deployed below
+          APPNAME: your-app-name
+          ACCOUNT: your-account-name
+          SERVER: shinyapps.io # server to deploy
         run: |
-          shinytest2::test_app()
-          
-      - name: Create manifest.json
-        shell: Rscript {0}
-        run: |
-          rsconnect::writeManifest()
-          
-      - name: Publish Connect content
-        uses: rstudio/actions/connect-publish@main
-        with:
-          url: ${{ secrets.CONNECT_SERVER }}
-          api-key: ${{ secrets.CONNECT_API_KEY }}
-          access-type: logged_in
-          dir: |
-            .:/shiny-app-demo-cicd-github-actions
+          rsconnect::setAccountInfo("${{ secrets.RSCONNECT_USER }}", "${{ secrets.RSCONNECT_TOKEN }}", "${{ secrets.RSCONNECT_SECRET }}")
+          rsconnect::deployApp(appName = "${{ env.APPNAME }}", account = "${{ env.ACCOUNT }}", server = "${{ env.SERVER }}")
 ---
 ```
 
@@ -633,87 +696,6 @@ jobs:
 Workflows can include tests, markdown renders, shell scripts, cron jobs, or deployments. They can be as simple or as complicated as you need. Open-source community provides a ton of examples of actions.
 :::
 
-## 🔍 Style R code - https://styler.r-lib.org/
-
-``` yaml
----
-on:
-  push:
-    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw", "**.[rR]profile"]
-
-name: style.yaml
-
-permissions: read-all
-
-jobs:
-  style:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-
-      - name: Install dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::styler, any::roxygen2
-          needs: styler
-
-      - name: Enable styler cache
-        run: styler::cache_activate()
-        shell: Rscript {0}
-
-      - name: Determine cache location
-        id: styler-location
-        run: |
-          cat(
-            "location=",
-            styler::cache_info(format = "tabular")$location,
-            "\n",
-            file = Sys.getenv("GITHUB_OUTPUT"),
-            append = TRUE,
-            sep = ""
-          )
-        shell: Rscript {0}
-
-      - name: Cache styler
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.styler-location.outputs.location }}
-          key: ${{ runner.os }}-styler-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-styler-
-            ${{ runner.os }}-
-
-      - name: Style
-        run: styler::style_pkg()
-        shell: Rscript {0}
-
-      - name: Commit and push changes
-        run: |
-          if FILES_TO_COMMIT=($(git diff-index --name-only ${{ github.sha }} \
-              | egrep --ignore-case '\.(R|[qR]md|Rmarkdown|Rnw|Rprofile)$'))
-          then
-            git config --local user.name "$GITHUB_ACTOR"
-            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git commit ${FILES_TO_COMMIT[*]} -m "Style code (GHA)"
-            git pull --ff-only
-            git push origin
-          else
-            echo "No changes to commit."
-          fi
----
-```
 
 ## 🔍 Test Coverage
 
@@ -821,37 +803,56 @@ jobs:
           LINTR_ERROR_ON_LINT: true
 ---
 ```
+## Where to deploy our app?
 
-## ✏️ Your turn {.smaller transition="slide-in"}
+![](assets/images/03/slides.png)
 
-::: {.callout-note icon="false"}
-## Activity 3: Create Github Action
+-   cloud container deployment + registry
 
-```         
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
-jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-```
+-   build your own
+
+-   platform as a service
+
+-   Cloud platform all in one
+
+## Things to consider when choosing a deployment framework
+
+-   cost
+
+-   how many apps to deploy? what kinds of apps?
+
+-   who are users? do they need to login?
+
+-   how secure does the data need to be? (and the server it resides in)
+
+-   compute resources
+
+-   integration with git and ci/cd
+
+## Posit Connect
+
+![](assets/images/03/Posit%20Team%20Concept%20Map.jpg)
+
+## Connect Cloud
+
+
+![](assets/images/02/posit-connect-cloud.jpg)
+
+
+##
+::: nonincremental
+
+1. Collaboration & Version Control
+2. Environment Management & Reproducibility
+3. Continuous Integration & Deployment
+4. [Automation]{.mark}
+5. Containers & Orchestration
+6. Observability & Monitoring
+
 :::
 
-<br> <br> <br> [Activity 3 Instructions](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#enable-actions-in-your-repository)
 
-## Automation Tasks
+## Automating Tasks
 
 <br> <iframe src="https://giphy.com/embed/7XsFGzfP6WmC4" width="480" height="366" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
@@ -1022,10 +1023,10 @@ regular_formatting = [
 ]
 ```
 
-## ✏️ Your turn {.smaller transition="slide-in"}
+## ✏️ Try it out {.smaller transition="slide-in"}
 
 ::: {.callout-note icon="false"}
-## Activity 4: Build a pre-commit hook
+## Build a pre-commit hook
 
 ```{bash}
 # run in your bash terminal
@@ -1050,9 +1051,117 @@ pre-commit install
 ```
 :::
 
-<br> <br> <br> [Activity 4 Instructions](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#activity-4-pre-commit-hooks)
+##
+::: nonincremental
 
-## Orchestration
+1. Collaboration & Version Control
+2. Environment Management & Reproducibility
+3. Continuous Integration & Deployment
+4. Automation
+5. [Containers & Orchestration]{.mark}
+6. Observability & Monitoring
+
+:::
+
+## Containers & Orchestration
+
+![](assets/images/02/dockerk8s.png)
+
+-   **Consistency:** ensure that applications run the same way across different environments.
+-   **Isolation:** isolate applications and their dependencies, preventing conflicts.
+-   **Portability:** run on any system that supports container, reducing "it works on my machine" issues.
+
+## Benefits
+
+-   allows you to package up everything you need to reproduce an environment/application
+-   lightweight system without much overhead
+-   share containers with colleagues without requiring them to have to set up their own local machines
+-   quick testing and debugging
+-   allows you to easily version snapshots of your work
+-   scaling up with limited local compute
+-   Create isolated environments for different experiments.
+
+## Containerization with Docker
+
+-   Isolation of applications inside individual OS-based environments inside virtual machines or physical servers
+
+-   Super lightweight and fast to spin-up (much faster than a VM)
+
+-   Made up of individual layers so its really quick to build
+
+-   Can build isolated applications from their own image
+
+-   Containers are immutable and ephemeral
+
+![](assets/images/02/dockerfile-layers.png)
+
+
+## How Docker works
+
+![](assets/images/02/lifecycle.png)
+
+::: notes
+
+dockerfile - is a script of instructions for how to build an image
+
+image - everything you need to run an application - all the layers that build the environment, dependencies, libraries, files
+
+container - isolated instance of a running image. you can create, stop, start, restart, containers. When a container is removed/deleted any changes to its state that arent stored in some kind of persistent storage disappear. Called ephemeral container - Think of a container as a snapshot in time of a particular application.
+
+Missing piece - repository - for images, like dockerhub, container registry cloud services, private registries
+
+Build - Run - Push
+
+:::
+
+
+## Docker in CI
+
+``` yaml
+---
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/latest
+---
+```
+
+
+##
+::: nonincremental
+
+1. Collaboration & Version Control
+2. Environment Management & Reproducibility
+3. Continuous Integration & Deployment
+4. Automation
+5. Containers & Orchestration
+6. [Observability & Monitoring]{.mark}
+
+:::
+
+
+## Observability & Monitoring
 
 <br>
 
@@ -1118,11 +1227,11 @@ my_logfile = "my_logfile.txt"
 # Configure your console and file layout
 
 my_console_appender = console_appender(layout = default_log_layout())
-my_file_appender = file_appender(my_logfile, append = TRUE, 
+my_file_appender = file_appender(my_logfile, append = TRUE,
                             layout = default_log_layout())
 
 # the log severity you are using
-my_logger <- log4r::logger(threshold = "INFO", 
+my_logger <- log4r::logger(threshold = "INFO",
                 appenders= list(my_console_appender,my_file_appender))
 
 # functions that you will add into your script
@@ -1145,10 +1254,10 @@ log4r_debug <- function() {
 ```{r}
 log4r_debug() # will not trigger log entry because threshold was set to INFO
 
-log4r_info() 
+log4r_info()
 #> INFO  [2024-09-01 12:30:05] Info_message.
 
-log4r_error() 
+log4r_error()
 #> ERROR [2024-09-01 12:30:05] Error_message
 
 readLines(my_logfile)
@@ -1198,269 +1307,7 @@ logging.debug("debug_message") # will not trigger log entry because threshold wa
 :::
 :::
 
-## Containers & Orchestration
 
-![](assets/images/02/dockerk8s.png)
+## Thank you so much!
 
--   **Consistency:** ensure that applications run the same way across different environments.
--   **Isolation:** isolate applications and their dependencies, preventing conflicts.
--   **Portability:** run on any system that supports container, reducing "it works on my machine" issues.
-
-## Benefits
-
--   allows you to package up everything you need to reproduce an environment/application
--   lightweight system without much overhead
--   share containers with colleagues without requiring them to have to set up their own local machines
--   quick testing and debugging
--   allows you to easily version snapshots of your work
--   scaling up with limited local compute
--   Create isolated environments for different experiments.
-
-## Containerization with Docker
-
--   Isolation of applications inside individual OS-based environments inside virtual machines or physical servers
-
--   Super lightweight and fast to spin-up (much faster than a VM)
-
--   Made up of individual layers so its really quick to build
-
--   Can build isolated applications from their own image
-
--   Containers are immutable and ephemeral
-
-![](assets/images/02/dockerfile-layers.png)
-
-## Orchestration with Kubernetes
-
--   orchestrate multiple virtual machines or nodes to run in sync with each other
-
--   a set of building blocks ("primitives") that integrate well with other deployment platforms and are "extensible" through the K8s API
-
--   provides mechanisms to deploy, maintain and scale applications based on CPU, memory or custom metrics
-
-## How Docker works
-
-![](assets/images/02/lifecycle.png)
-
-dockerfile - is a script of instructions for how to build an image
-
-image - everything you need to run an application - all the layers that build the environment, dependencies, libraries, files
-
-container - isolated instance of a running image. you can create, stop, start, restart, containers. When a container is removed/deleted any changes to its state that arent stored in some kind of persistent storage disappear. Called ephemeral container - Think of a container as a snapshot in time of a particular application.
-
-Missing piece - repository - for images, like dockerhub, container registry cloud services, private registries
-
-Build - Run - Push
-
-## ✏️ Your turn {.smaller transition="slide-in"}
-
-::: {.callout-note icon="false"}
-## Activity 5: Run docker containers
-
--   Run interactively
--   Run in detached mode
-:::
-
-[![](assets/images/02/file-image-container.png)Instructions here](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#activity-5-docker-run)
-
-::: notes
-dockerfile - is a script of instructions for how to build an image
-
-image - everything you need to run an application - all the layers that build the environment, dependencies, libraries, files
-
-container - isolated instance of a running image. you can create, stop, start, restart, containers. When a container is removed/deleted any changes to its state that arent stored in some kind of persistent storage disappear. Called ephemeral container - Think of a container as a snapshot in time of a particular application.
-
-Missing piece - repository - for images, like dockerhub, container registry cloud services, private registries
-:::
-
-## Modes for running containers
-
-+------------------------------------------------------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Mode                                                       | Run command       | Use case                                                                                                                                                                                                           |
-+============================================================+===================+====================================================================================================================================================================================================================+
-| Detached                                                   | `docker run -d`   | This runs the container in the **background** so the container keeps running until the application process exits, or you stop the container. Detached mode is often used for production purposes.                  |
-+------------------------------------------------------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Interactive + terminal                                     | `docker run -it`  | This runs the container in the **foreground** so you are unable to access the command prompt. Interactive mode is often used for development and testing.                                                          |
-+------------------------------------------------------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Remove everything once the container is done with its task | `docker run --rm` | This mode is used on foreground containers that perform **short-term tasks** such as tests or database backups. Once it is removed anything you may have downloaded or created in the container is also destroyed. |
-+------------------------------------------------------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-## Container Debugging
-
-<br>
-
-```{bash}
-docker run -it -d ubuntu
-docker container ls -a 
-docker exec -it CONTAINER_ID bash
-
-docker container run -d --name mydb \
- --name mydb \
- -e MYSQL_ROOT_PASSWORD=my-secret-pw \ 
- mysql
- 
- docker container logs mydb
-```
-
-## ✏️ Your turn {.smaller transition="slide-in"}
-
-::: {.callout-note icon="false"}
-## Activity 6: Debug your containers
-
--   Use exec mode
--   Get container logs
-
-[Instructions here](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#activity-6-debugging-containers)
-:::
-
-## Writing a Dockerfile
-
-<br>
-
-1\. Determine your base image
-
-2\. Install application dependencies
-
-3\. Copy in any relevant source code and/or binaries
-
-4\. Configure the final image
-
-## Writing a Dockerfile
-
-<br> 1. Determine your base image <br>
-
-``` python
-FROM python:3.12
-WORKDIR /usr/local/app
-```
-
-## Writing a Dockerfile
-
-<br> 2. Install application dependencies <br>
-
-``` python
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-```
-
-## Writing a Dockerfile
-
-<br> 3. Copy in any relevant source code and/or binaries <br>
-
-``` python
-# Copy in the source code
-COPY src ./src
-EXPOSE 5000
-```
-
-## Writing a Dockerfile
-
-<br> 4. Run/Add any additional configurations and commands <br>
-
-``` python
-# Setup an app user so the container doesn't run as the root user
-RUN useradd app
-USER app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
-```
-
-## Writing a Dockerfile
-
-``` python
-FROM python:3.12
-WORKDIR /usr/local/app
-
-# Install the application dependencies
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy in the source code
-COPY src ./src
-EXPOSE 5000
-
-# Setup an app user so the container doesn't run as the root user
-RUN useradd app
-USER app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
-```
-
-## Additional Dockerfile instructions
-
-<br>
-
-+--------------+-------------------------------------------------------------+
-| Command      | Description                                                 |
-+==============+=============================================================+
-| ARG          | Define variables passed at build time                       |
-+--------------+-------------------------------------------------------------+
-| FROM         | Base image                                                  |
-+--------------+-------------------------------------------------------------+
-| ENV          | Define variable                                             |
-+--------------+-------------------------------------------------------------+
-| COPY         | Add local file or directory                                 |
-+--------------+-------------------------------------------------------------+
-| RUN          | Execute commands during build process                       |
-+--------------+-------------------------------------------------------------+
-| CMD          | Execute command when you run container; once per Dockerfile |
-+--------------+-------------------------------------------------------------+
-| ENTRYPOINT   | Execute command to change default entrypoint at runtime     |
-+--------------+-------------------------------------------------------------+
-| USER         | Set username or ID                                          |
-+--------------+-------------------------------------------------------------+
-| VOLUME       | Mount host machine to container                             |
-+--------------+-------------------------------------------------------------+
-| EXPOSE       | Specify port pn which container listens at runtime          |
-+--------------+-------------------------------------------------------------+
-
-## Docker in CI
-
-``` yaml
----
-         
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/latest
----
-```
-
-## ✏️ Your turn {.smaller transition="slide-in"}
-
-::: {.callout-note icon="false"}
-## Activity 7: Debug your containers
-
--   Use exec mode
--   Get container logs
-
-[Instructions here](https://pub.current.posit.team/devops-worksheet/exercise_instructions.html#activity-7-write-a-dockerfile)
-:::
-
-## Let's Take a Break!
-
-![](assets/images/04/break.png)
-
-::: footer
-Artwork by @allison_horst
-:::
+![](assets/images/04/cat.png)
